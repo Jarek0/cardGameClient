@@ -1,0 +1,37 @@
+package edu.pollub.pl.cardgameclient.communication.websocket;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class QueueHandler {
+
+    private String topic;
+    private Set<StompMessageListener> listeners = new HashSet<>();
+    public QueueHandler(String topic) {
+        this.topic = topic;
+    }
+
+    public QueueHandler() {
+
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void addListener(StompMessageListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(StompMessageListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void onMessage(StompMessage message) {
+        for(StompMessageListener listener : listeners){
+            listener.onMessage(message);
+        }
+
+    }
+
+}

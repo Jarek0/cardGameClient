@@ -1,0 +1,61 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- common -->
+    <string name="loading">Loading…</string>
+    <string name="app_name">Super Card Game</string>
+    <string name="cancel">Cancel</string>
+    <string name="submit">Submit</string>
+
+    <!-- server error codes -->
+    <string name="internalServerError">Unexpected error. Please try latter</string>
+    <string name="fatalError">Unexpected error. Please try latter</string>
+    <string name="unauthorized">Unauthorized request. Please try to sign in again</string>
+
+    <!-- login and registration -->cha
+    <string name="loginTitle">Sign in to your account</string>
+    <string name="registerTitle">Sign up</string>
+    <string name="login">Sign in</string>
+    <string name="password">Password</string>
+    <string name="confirmPassword">Confirm password</string>
+    <string name="loginLabel">Nickname:</string>
+    <string name="passwordLabel">Password:</string>
+    <string name="newPasswordLabel">New password:</string>
+    <string name="confirmNewPasswordLabel">Confirm password:</string>
+    <string name="confirmPasswordLabel">Confirm password:</string>
+    <string name="oldPasswordLabel">Old password:</string>
+    <string name="createAccount">Sign up</string>
+    <string name="loginSuccess">Authorization successful</string>
+    <string name="registerSuccess">Registration successful</string>
+    <string name="auth.badCredentials" tools:ignore="ExtraTranslation">Bad credentials</string>
+    <string name="loginRequired">Login is required</string>
+    <string name="passwordRequired">Password is required</string>
+    <string name="newPasswordRequired">New password is required</string>
+    <string name="newPasswordConfirmationRequired">New password confirmation is required</string>
+    <string name="oldPasswordRequired">Old password is required</string>
+    <string name="passwordConfirmationFail">Password and its confirmation must be the same</string>
+    <string name="successfulPasswordChange">Successful password change</string>
+    <string name="successfulNickChange">Successful nick change</string>
+    <string name="password.validation.notMatch"  tools:ignore="ExtraTranslation">Incorrect old password</string>
+    <string name="registration.validation.login.alreadyUsed"  tools:ignore="ExtraTranslation">Nick is already used</string>
+
+    <!-- menu -->
+    <string name="welcome">Welcome</string>
+    <string name="createGame">Create game</string>
+    <string name="findGame">Find game</string>
+    <string name="changeNick">Change nick</string>
+    <string name="changePassword">Change password</string>
+    <string name="logout">Sign out</string>
+
+    <!-- game organization -->
+    <string name="game.notFound"  tools:ignore="ExtraTranslation">Game not found</string>
+    <string name="game.organization.closed"  tools:ignore="ExtraTranslation">Game already closed</string>
+    <string name="game.organization.full"  tools:ignore="ExtraTranslation">Game already closed</string>
+    <string name="waitingForPlayer">Waiting for second player…</string>
+    <string name="playerName">Player name</string>
+    <string name="comeBack">Come back</string>
+    <string name="refresh">Refresh</string>
+    <string name="defaultPage">1/2</string>
+    <string name="previousPage">Previous page</string>
+    <string name="nexPage">Next page</string>
+    <string name="gameCreated">Game created. Waiting for a player…</string>
+
+</resources>
