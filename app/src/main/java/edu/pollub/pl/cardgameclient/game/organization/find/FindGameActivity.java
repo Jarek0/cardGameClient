@@ -1,5 +1,6 @@
-package edu.pollub.pl.cardgameclient.game.find;
+package edu.pollub.pl.cardgameclient.game.organization.find;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.ArrayAdapter;
@@ -16,15 +17,23 @@ import javax.inject.Inject;
 import edu.pollub.pl.cardgameclient.R;
 import edu.pollub.pl.cardgameclient.common.NetworkOperationStrategy;
 import edu.pollub.pl.cardgameclient.common.activity.SimpleNetworkActivity;
-import edu.pollub.pl.cardgameclient.game.GameOrganizationService;
+import edu.pollub.pl.cardgameclient.communication.websocket.StompMessageListener;
+import edu.pollub.pl.cardgameclient.game.organization.GameOrganizationService;
+import edu.pollub.pl.cardgameclient.game.play.PlayGameActivity;
+import event.GameStartedEvent;
 import lombok.RequiredArgsConstructor;
 import response.GameResponse;
 import response.PageResponse;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
+import static edu.pollub.pl.cardgameclient.config.ConfigConst.GAME_QUEUE;
+import static java.util.Objects.nonNull;
+
 @ContentView(R.layout.activity_find_game)
 public class FindGameActivity extends SimpleNetworkActivity {
+
+    private String gameEndpoint;
 
     private int currentPage = 0;
 
@@ -63,13 +72,16 @@ public class FindGameActivity extends SimpleNetworkActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        returnButton.setOnClickListener(v -> comeBack());
+        returnButton.setOnClickListener(v -> {
+            if(nonNull(gameEndpoint)) unSubscribe(gameEndpoint);
+            comeBack();
+        });
         refreshButton.setOnClickListener(v -> simpleNetworkTask(currentPage()).execute());
         nextPageButton.setOnClickListener(v -> simpleNetworkTask(nextPage()).execute());
         previousPageButton.setOnClickListener(v -> simpleNetworkTask(previousPage()).execute());
         gameSearchView.setOnQueryTextListener(new FindGameListener());
         openGamesListView.setOnItemClickListener(
-                (adapter, v, position, id) -> simpleNetworkTask(new StartGameTask(games.get(position).getId())).execute()
+                (adapter, v, position, id) -> simpleNetworkTask(new JoinGameTask(games.get(position).getId())).execute()
         );
     }
 
@@ -87,16 +99,16 @@ public class FindGameActivity extends SimpleNetworkActivity {
                 .map(GameResponse::getFounderLogin)
                 .collect(Collectors.toList());
 
-        runOnUiThread(
-                () -> {
-                    nextPageButton.setEnabled(currentPage < totalPages-1);
-                    previousPageButton.setEnabled(currentPage > 0);
-                    int currentPage = totalPages != 0? this.currentPage+1 : 0;
-                    pageNumberView.setText(currentPage + "/" + totalPages);
-                    ArrayAdapter<String> gamesAdapter = new ArrayAdapter<>(this, R.layout.open_game_row, R.id.gameName, gameNames);
-                    openGamesListView.setAdapter(gamesAdapter);
-                }
-        );
+        runOnUiThread(() -> refreshGamesView(gameNames));
+    }
+
+    private void refreshGamesView(List<String> gameNames) {
+        nextPageButton.setEnabled(currentPage < totalPages-1);
+        previousPageButton.setEnabled(currentPage > 0);
+        int currentPage = totalPages != 0? this.currentPage+1 : 0;
+        pageNumberView.setText(currentPage + "/" + totalPages);
+        ArrayAdapter<String> gamesAdapter = new ArrayAdapter<>(this, R.layout.open_game_row, R.id.gameName, gameNames);
+        openGamesListView.setAdapter(gamesAdapter);
     }
 
     @RequiredArgsConstructor
@@ -134,13 +146,19 @@ public class FindGameActivity extends SimpleNetworkActivity {
         return new GetOpenGamesTask(currentPage-1, gameName);
     }
 
+    private void listenForGameStarted(String gameId) {
+        gameEndpoint = GAME_QUEUE + "/" + gameId;
+        subscribe(gameEndpoint, new GameStartedListener());
+    }
+
     @RequiredArgsConstructor
-    public class StartGameTask extends NetworkOperationStrategy {
+    public class JoinGameTask extends NetworkOperationStrategy {
 
         private final String gameId;
 
         @Override
         public void execute() throws Exception {
+            listenForGameStarted(gameId);
             service.join(gameId);
         }
 
@@ -159,5 +177,21 @@ public class FindGameActivity extends SimpleNetworkActivity {
             return false;
         }
 
+    }
+
+    public class GameStartedListener extends StompMessageListener<GameStartedEvent> {
+
+        @Override
+        public void onMessage(GameStartedEvent event)  {
+            unSubscribe(gameEndpoint);
+            showToast(R.string.gameStarted);
+            Intent intent = new Intent(FindGameActivity.this, PlayGameActivity.class);
+            intent.putExtra("event", event);
+            startActivityForResult(intent, 0);
+        }
+
+        GameStartedListener() {
+            super(GameStartedEvent.class);
+        }
     }
 }

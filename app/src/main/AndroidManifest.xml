@@ -22,8 +22,9 @@
         <activity android:name=".authorization.registration.RegistrationActivity"/>
         <activity android:name=".authorization.changePassword.ChangePasswordActivity"/>
         <activity android:name=".authorization.changeLogin.ChangeNickActivity"/>
-        <activity android:name=".game.create.GameOrganizationActivity"/>
-        <activity android:name=".game.find.FindGameActivity"/>
+        <activity android:name=".game.organization.create.GameOrganizationActivity"/>
+        <activity android:name=".game.organization.find.FindGameActivity"/>
+        <activity android:name=".game.play.PlayGameActivity" android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

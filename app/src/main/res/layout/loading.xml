@@ -8,6 +8,8 @@
     android:animateLayoutChanges="true"
     android:layout_alignParentBottom="true"
     android:background="@android:color/black"
+    android:screenOrientation="portrait"
+    android:orientation="vertical"
     android:clickable="true"
     android:elevation="2dp"
     android:focusable="true"

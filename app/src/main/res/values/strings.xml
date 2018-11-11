@@ -53,11 +53,14 @@
     <string name="waitingForPlayer">Waiting for second player…</string>
     <string name="playerName">Player name</string>
     <string name="comeBack">Come back</string>
+    <string name="stop">Stop</string>
     <string name="refresh">Refresh</string>
     <string name="defaultPage">1/2</string>
     <string name="previousPage">Previous page</string>
     <string name="nexPage">Next page</string>
     <string name="gameCreated">Game created. Waiting for a player…</string>
     <string name="gameStarted">Game started.</string>
+    <string name="defaultCardsNumber">Cards: 26</string>
+    <string name="defaultEnemyCardsNumber">Enemy cards: 5</string>
 
 </resources>

@@ -52,4 +52,6 @@ dependencies {
     implementation 'org.roboguice:roboblender:3.0.1'
     annotationProcessor 'org.roboguice:roboblender:3.0.1'
     implementation 'com.pnikosis:materialish-progress:1.7'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'org.lucasr.twowayview:twowayview:0.1.4'
 }

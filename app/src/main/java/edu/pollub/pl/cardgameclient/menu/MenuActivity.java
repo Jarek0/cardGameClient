@@ -14,8 +14,8 @@ import edu.pollub.pl.cardgameclient.authorization.changePassword.ChangePasswordA
 import edu.pollub.pl.cardgameclient.authorization.login.LoginService;
 import edu.pollub.pl.cardgameclient.common.NetworkOperationStrategy;
 import edu.pollub.pl.cardgameclient.common.activity.SimpleNetworkActivity;
-import edu.pollub.pl.cardgameclient.game.create.GameOrganizationActivity;
-import edu.pollub.pl.cardgameclient.game.find.FindGameActivity;
+import edu.pollub.pl.cardgameclient.game.organization.create.GameOrganizationActivity;
+import edu.pollub.pl.cardgameclient.game.organization.find.FindGameActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 

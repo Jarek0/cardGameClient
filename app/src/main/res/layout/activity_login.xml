@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@+id/loadingView"
+    android:screenOrientation="portrait"
+    android:orientation="vertical"
     android:background="@color/background"
     tools:context=".authorization.login.LoginActivity"
     tools:layout_editor_absoluteY="25dp">

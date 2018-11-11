@@ -112,6 +112,12 @@ public class HttpClient {
         return parseResponse(response, responseClass);
     }
 
+    public <T extends CardGameResponse> T post(String url, TypeReference<T> responseClass) throws Exception {
+        Request request = createRequest(url, new HashMap<>(), POST);
+        Response response = sendRequest(request);
+        return parseResponse(response, responseClass);
+    }
+
     public void put(String url) throws Exception {
         Request request = createRequest(url, new HashMap<>(), PUT);
         Response response = sendRequest(request);

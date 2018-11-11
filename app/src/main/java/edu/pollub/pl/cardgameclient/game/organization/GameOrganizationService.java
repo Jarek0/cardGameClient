@@ -1,4 +1,4 @@
-package edu.pollub.pl.cardgameclient.game;
+package edu.pollub.pl.cardgameclient.game.organization;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -23,8 +23,8 @@ public class GameOrganizationService {
         this.httpClient = httpClient;
     }
 
-    public void organize() throws Exception {
-        httpClient.post(GAME_ORGANIZATION_URL);
+    public GameResponse organize() throws Exception {
+        return httpClient.post(GAME_ORGANIZATION_URL, new TypeReference<GameResponse>() {});
     }
 
     public void join(String gameId) throws Exception {
