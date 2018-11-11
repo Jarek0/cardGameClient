@@ -2,7 +2,6 @@ package edu.pollub.pl.cardgameclient.communication.websocket;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -21,14 +20,17 @@ public class WebSocketClient extends WebSocketListener {
 
     private Map<String, QueueHandler> queues = new HashMap<>();
     private CloseHandler closeHandler;
+    private LogoutHandler logoutHandler;
     private String id = "sub-001";
     private WebSocket webSocket;
 
     private final HttpClient httpClient;
+    private final StompMessageSerializer serializer;
 
     @Inject
-    public WebSocketClient(HttpClient httpClient) {
+    public WebSocketClient(HttpClient httpClient, StompMessageSerializer serializer) {
         this.httpClient = httpClient;
+        this.serializer = serializer;
     }
 
     public void setId(String id) {
@@ -53,14 +55,11 @@ public class WebSocketClient extends WebSocketListener {
         queues.remove(queue);
     }
 
-    public Optional<QueueHandler> getQueueHandler(String queue) {
-        if(queues.containsKey(queue)){
-            return Optional.of(queues.get(queue));
-        }
-        return Optional.empty();
+    public QueueHandler getQueueHandler(String queue) {
+        return queues.get(queue);
     }
 
-    public void connect(String address) {
+    public void connect(String address, Runnable onLogout) {
         OkHttpClient client = httpClient.getClient();
 
         Request request = new Request.Builder()
@@ -68,8 +67,7 @@ public class WebSocketClient extends WebSocketListener {
                 .build();
 
         client.newWebSocket(request, this);
-
-        client.dispatcher().executorService().shutdown();
+        this.logoutHandler = new LogoutHandler(onLogout);
     }
 
     @Override public void onOpen(WebSocket webSocket, Response response) {
@@ -90,14 +88,14 @@ public class WebSocketClient extends WebSocketListener {
         StompMessage message = new StompMessage("CONNECT");
         message.put("accept-version", "1.1");
         message.put("heart-beat", "10000,10000");
-        webSocket.send(StompMessageSerializer.serialize(message));
+        webSocket.send(serializer.serialize(message));
     }
 
     private void sendSubscribeMessage(WebSocket webSocket, String queue) {
         StompMessage message = new StompMessage("SUBSCRIBE");
         message.put("id", id);
         message.put("destination", queue);
-        webSocket.send(StompMessageSerializer.serialize(message));
+        webSocket.send(serializer.serialize(message));
     }
 
     private void sendMessage(String jsonMessage, String queue) {
@@ -105,12 +103,13 @@ public class WebSocketClient extends WebSocketListener {
             StompMessage message = new StompMessage(jsonMessage);
             message.put("id", id);
             message.put("destination", queue);
-            webSocket.send(StompMessageSerializer.serialize(message));
+            webSocket.send(serializer.serialize(message));
         }
     }
 
     public void disconnect() {
         if(nonNull(webSocket)){
+            logoutHandler.deactivate();
             closeHandler.close();
             webSocket = null;
             closeHandler = null;
@@ -121,8 +120,12 @@ public class WebSocketClient extends WebSocketListener {
         return nonNull(closeHandler);
     }
 
+    public boolean isSubscribed(String queue) {
+        return queues.containsKey(queue);
+    }
+
     @Override public void onMessage(WebSocket webSocket, String text) {
-        StompMessage message = StompMessageSerializer.deserialize(text);
+        StompMessage message = serializer.deserialize(text);
         String queue = message.getHeader("destination");
         if(queues.containsKey(queue)){
             queues.get(queue).onMessage(message);
@@ -131,6 +134,9 @@ public class WebSocketClient extends WebSocketListener {
 
     @Override public void onClosing(WebSocket webSocket, int code, String reason) {
         webSocket.close(1000, null);
+        if(!logoutHandler.isLoggedOut()) {
+            logoutHandler.onLogout.run();
+        }
     }
 
     @Override public void onFailure(WebSocket webSocket, Throwable t, Response response) {

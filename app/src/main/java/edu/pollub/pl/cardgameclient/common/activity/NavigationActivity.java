@@ -8,8 +8,8 @@ import roboguice.activity.RoboActivity;
 public abstract class NavigationActivity extends RoboActivity {
 
     public void goTo(Class<? extends Activity> activityToGo) {
-        Intent registerIntent = new Intent(this, activityToGo);
-        startActivityForResult(registerIntent, 0);
+        Intent intent = new Intent(this, activityToGo);
+        startActivityForResult(intent, 0);
     }
 
     public void comeBack() {

@@ -1,10 +1,24 @@
 package edu.pollub.pl.cardgameclient.communication.websocket;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
+import java.io.IOException;
 import java.util.Map;
 
-public class StompMessageSerializer {
+import javax.inject.Singleton;
 
-    public static String serialize(StompMessage message) {
+import edu.pollub.pl.cardgameclient.communication.websocket.exception.ParseBodyFail;
+import event.CardGameEvent;
+
+import static java.util.Objects.isNull;
+
+@Singleton
+class StompMessageSerializer {
+
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public String serialize(StompMessage message) {
         StringBuilder buffer = new StringBuilder();
 
         buffer.append(message.getCommand()).append("\n");
@@ -15,13 +29,22 @@ public class StompMessageSerializer {
         }
 
         buffer.append("\n");
-        buffer.append(message.getContent());
+        buffer.append(serializeBody(message.getContent()));
         buffer.append('\0');
 
         return buffer.toString();
     }
 
-    public static StompMessage deserialize(String message) {
+    private String serializeBody(CardGameEvent body) {
+        try {
+            if(isNull(body)) return "";
+            return mapper.writeValueAsString(body);
+        } catch (IOException e) {
+            throw new ParseBodyFail(e);
+        }
+    }
+
+    public StompMessage deserialize(String message) {
         String[] lines = message.split("\n");
 
         String command = lines[0].trim();
@@ -51,8 +74,18 @@ public class StompMessageSerializer {
 
         String body = sb.toString().trim();
 
-        result.setContent(body);
+        result.setContent(parseBody(body));
         return result;
     }
+
+    private CardGameEvent parseBody(String body) {
+        try {
+            if(body.isEmpty()) return null;
+            return mapper.readValue(body, CardGameEvent.class);
+        } catch (IOException e) {
+            throw new ParseBodyFail(body, e);
+        }
+    }
+
 
 }

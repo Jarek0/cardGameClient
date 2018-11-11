@@ -5,18 +5,14 @@ import java.util.Set;
 
 public class QueueHandler {
 
-    private String topic;
+    private String queue;
     private Set<StompMessageListener> listeners = new HashSet<>();
-    public QueueHandler(String topic) {
-        this.topic = topic;
+    QueueHandler(String queue) {
+        this.queue = queue;
     }
 
-    public QueueHandler() {
-
-    }
-
-    public String getTopic() {
-        return topic;
+    public String getQueue() {
+        return queue;
     }
 
     public void addListener(StompMessageListener listener) {
@@ -27,9 +23,12 @@ public class QueueHandler {
         listeners.remove(listener);
     }
 
+    @SuppressWarnings("unchecked")
     public void onMessage(StompMessage message) {
         for(StompMessageListener listener : listeners){
-            listener.onMessage(message);
+            if(listener.supports(message.getContent())) {
+                listener.onMessage(message.getContent());
+            }
         }
 
     }

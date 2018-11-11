@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import javax.inject.Inject;
 
 import edu.pollub.pl.cardgameclient.R;
 import edu.pollub.pl.cardgameclient.authorization.changeLogin.ChangeNickActivity;
 import edu.pollub.pl.cardgameclient.authorization.changePassword.ChangePasswordActivity;
-import edu.pollub.pl.cardgameclient.common.activity.SharedPreferencesActivity;
+import edu.pollub.pl.cardgameclient.authorization.login.LoginService;
+import edu.pollub.pl.cardgameclient.common.NetworkOperationStrategy;
+import edu.pollub.pl.cardgameclient.common.activity.SimpleNetworkActivity;
 import edu.pollub.pl.cardgameclient.game.create.GameOrganizationActivity;
 import edu.pollub.pl.cardgameclient.game.find.FindGameActivity;
 import roboguice.inject.ContentView;
@@ -19,7 +22,7 @@ import roboguice.inject.InjectView;
 import static edu.pollub.pl.cardgameclient.config.ConfigConst.LOGIN_KEY;
 
 @ContentView(R.layout.activity_menu)
-public class MenuActivity extends SharedPreferencesActivity {
+public class MenuActivity extends SimpleNetworkActivity {
 
     @InjectView(R.id.title)
     private TextView textView;
@@ -39,6 +42,9 @@ public class MenuActivity extends SharedPreferencesActivity {
     @InjectView(R.id.logoutButton)
     private Button logoutButton;
 
+    @Inject
+    private LoginService loginService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,11 +53,7 @@ public class MenuActivity extends SharedPreferencesActivity {
         findGameButton.setOnClickListener((v) -> goTo(FindGameActivity.class));
         changNickButton.setOnClickListener((v) -> goTo(ChangeNickActivity.class));
         changePasswordButton.setOnClickListener((v) -> goTo(ChangePasswordActivity.class));
-        logoutButton.setOnClickListener((v) -> {
-                    removeString(LOGIN_KEY);
-                    comeBack();
-                }
-        );
+        logoutButton.setOnClickListener((v) -> simpleNetworkTask(new LogoutTask()).execute());
     }
 
     @Override
@@ -68,6 +70,19 @@ public class MenuActivity extends SharedPreferencesActivity {
         }
         else {
             comeBack();
+        }
+    }
+
+    private class LogoutTask extends NetworkOperationStrategy {
+
+        @Override
+        public void execute() throws Exception {
+            loginService.logout();
+        }
+
+        @Override
+        public void onSuccess() {
+            logout();
         }
     }
 }

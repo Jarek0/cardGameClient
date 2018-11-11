@@ -3,17 +3,17 @@ package edu.pollub.pl.cardgameclient.communication.websocket;
 import java.util.HashMap;
 import java.util.Map;
 
+import event.CardGameEvent;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class StompMessage {
     private Map<String, String> headers = new HashMap<>();
-    private String body="";
+    private CardGameEvent body;
     private String command;
 
     public StompMessage(String command) {
         this.command = command;
-    }
-
-    public StompMessage() {
-
     }
 
     public String getHeader(String name){
@@ -23,15 +23,19 @@ public class StompMessage {
     public void put(String name, String value){
         headers.put(name, value);
     }
-    public void setContent(String body){
+
+    public void setContent(CardGameEvent body){
         this.body = body;
     }
-    public String getContent() {
+
+    public CardGameEvent getContent() {
         return body;
     }
+
     public Map<String, String> getHeaders() {
         return headers;
     }
+
     public String getCommand() {
         return command;
     }

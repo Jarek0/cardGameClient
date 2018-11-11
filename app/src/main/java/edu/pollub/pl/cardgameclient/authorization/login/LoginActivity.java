@@ -1,5 +1,6 @@
 package edu.pollub.pl.cardgameclient.authorization.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,11 +11,14 @@ import command.LoginCommand;
 import edu.pollub.pl.cardgameclient.R;
 import edu.pollub.pl.cardgameclient.common.NetworkOperationStrategy;
 import edu.pollub.pl.cardgameclient.common.activity.SimpleNetworkActivity;
+import edu.pollub.pl.cardgameclient.communication.websocket.StompMessageListener;
 import edu.pollub.pl.cardgameclient.menu.MenuActivity;
 import edu.pollub.pl.cardgameclient.authorization.registration.RegistrationActivity;
+import event.LogoutUserEvent;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
+import static edu.pollub.pl.cardgameclient.config.ConfigConst.AUTH_QUEUE;
 import static edu.pollub.pl.cardgameclient.config.ConfigConst.LOGIN_KEY;
 
 
@@ -57,6 +61,10 @@ public class LoginActivity extends SimpleNetworkActivity {
         passwordInput.setText("");
     }
 
+    private void listerForLogout() {
+        subscribe(AUTH_QUEUE, new LogoutListener());
+    }
+
     private class LoginTask extends NetworkOperationStrategy {
 
         @Override
@@ -70,6 +78,8 @@ public class LoginActivity extends SimpleNetworkActivity {
         public void onSuccess() {
             showToast(R.string.loginSuccess);
             clearInputs();
+            connect();
+            listerForLogout();
             goTo(MenuActivity.class);
         }
 
@@ -88,5 +98,18 @@ public class LoginActivity extends SimpleNetworkActivity {
             }
             return true;
         }
+    }
+
+    private class LogoutListener extends StompMessageListener<LogoutUserEvent> {
+
+        @Override
+        public void onMessage(LogoutUserEvent messageBody) {
+            logout();
+        }
+
+        LogoutListener() {
+            super(LogoutUserEvent.class);
+        }
+
     }
 }

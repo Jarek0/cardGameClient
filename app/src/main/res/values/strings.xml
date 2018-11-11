@@ -24,6 +24,7 @@
     <string name="oldPasswordLabel">Old password:</string>
     <string name="createAccount">Sign up</string>
     <string name="loginSuccess">Authorization successful</string>
+    <string name="logoutSuccess">Logout successful</string>
     <string name="registerSuccess">Registration successful</string>
     <string name="auth.badCredentials" tools:ignore="ExtraTranslation">Bad credentials</string>
     <string name="loginRequired">Login is required</string>
@@ -57,5 +58,6 @@
     <string name="previousPage">Previous page</string>
     <string name="nexPage">Next page</string>
     <string name="gameCreated">Game created. Waiting for a player…</string>
+    <string name="gameStarted">Game started.</string>
 
 </resources>

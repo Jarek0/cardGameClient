@@ -26,4 +26,7 @@ public class LoginService {
         return httpClient.post(LOGIN_URL, command, new TypeReference<AuthenticatedResponse>() {});
     }
 
+    public void logout() throws Exception {
+        httpClient.delete(LOGIN_URL);
+    }
 }
