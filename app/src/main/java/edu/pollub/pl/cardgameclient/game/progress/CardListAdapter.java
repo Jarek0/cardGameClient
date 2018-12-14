@@ -1,29 +1,30 @@
-package edu.pollub.pl.cardgameclient.game.play;
+package edu.pollub.pl.cardgameclient.game.progress;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 
 import java.util.List;
 
 import edu.pollub.pl.cardgameclient.R;
 import model.Card;
 
-public class CardListAdapter extends ArrayAdapter<Card> implements View.OnClickListener {
+class CardListAdapter extends ArrayAdapter<Card> implements View.OnClickListener {
 
-    private List<Card> cards;
     private CardImagesLoader imagesLoader;
 
+    private CardMoveCallback cardMove;
+
     private static class ViewHolder {
-        ImageView cardView;
+        ImageButton card;
     }
 
-    public CardListAdapter(List<Card> cards, CardImagesLoader imagesLoader) {
+    CardListAdapter(List<Card> cards, CardImagesLoader imagesLoader, CardMoveCallback cardMove) {
         super(imagesLoader.getContext(), R.layout.card_item, cards);
-        this.cards = cards;
         this.imagesLoader = imagesLoader;
+        this.cardMove = cardMove;
     }
 
     @Override
@@ -43,16 +44,29 @@ public class CardListAdapter extends ArrayAdapter<Card> implements View.OnClickL
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(imagesLoader.getContext());
             convertView = inflater.inflate(R.layout.card_item, parent, false);
-            viewHolder.cardView = convertView.findViewById(R.id.card);
+            viewHolder.card = convertView.findViewById(R.id.card);
             convertView.setTag(viewHolder);
         }
         else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        imagesLoader.showCard(viewHolder.cardView, card);
-        viewHolder.cardView.setTag(position);
+        imagesLoader.showCard(viewHolder.card, card);
+        initCard(position, card, viewHolder);
 
         return convertView;
+    }
+
+    private void initCard(int position, Card card, ViewHolder viewHolder) {
+        viewHolder.card.setTag(position);
+        if(cardMove.canCardBeUsed(card)) {
+            viewHolder.card.setImageAlpha(255);
+            viewHolder.card.setEnabled(true);
+            viewHolder.card.setOnClickListener(v -> cardMove.useCard(card));
+        }
+        else {
+            viewHolder.card.setImageAlpha(75);
+            viewHolder.card.setEnabled(false);
+        }
     }
 }

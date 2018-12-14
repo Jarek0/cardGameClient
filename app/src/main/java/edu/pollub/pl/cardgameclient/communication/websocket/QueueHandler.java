@@ -1,12 +1,15 @@
 package edu.pollub.pl.cardgameclient.communication.websocket;
 
-import java.util.HashSet;
+import org.roboguice.shaded.goole.common.collect.Sets;
+
 import java.util.Set;
+
+import event.CardGameEvent;
 
 public class QueueHandler {
 
     private String queue;
-    private Set<StompMessageListener> listeners = new HashSet<>();
+    private Set<StompMessageListener> listeners = Sets.newConcurrentHashSet();
     QueueHandler(String queue) {
         this.queue = queue;
     }
@@ -23,10 +26,14 @@ public class QueueHandler {
         listeners.remove(listener);
     }
 
+    public <T extends CardGameEvent> void removeListeners(Class<T> eventClass) {
+        listeners.removeIf(l -> l.supports(eventClass));
+    }
+
     @SuppressWarnings("unchecked")
-    public void onMessage(StompMessage message) {
+    void onMessage(StompMessage message) {
         for(StompMessageListener listener : listeners){
-            if(listener.supports(message.getContent())) {
+            if(listener.supports(message.getContent().getClass())) {
                 listener.onMessage(message.getContent());
             }
         }

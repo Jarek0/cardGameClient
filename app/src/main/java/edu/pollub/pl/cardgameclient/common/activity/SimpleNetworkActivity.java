@@ -12,6 +12,7 @@ import edu.pollub.pl.cardgameclient.communication.http.RequestFail;
 import edu.pollub.pl.cardgameclient.communication.websocket.QueueHandler;
 import edu.pollub.pl.cardgameclient.communication.websocket.StompMessageListener;
 import edu.pollub.pl.cardgameclient.communication.websocket.WebSocketClient;
+import event.CardGameEvent;
 
 import static edu.pollub.pl.cardgameclient.config.ConfigConst.LOGIN_KEY;
 import static edu.pollub.pl.cardgameclient.config.ConfigConst.WS;
@@ -68,6 +69,11 @@ public abstract class SimpleNetworkActivity extends SharedPreferencesActivity {
 
     protected void unSubscribe(String queue) {
         webSocketClient.unSubscribe(queue);
+    }
+
+    protected <T extends CardGameEvent> void unSubscribeEvent(String queue, Class<T> eventClass) {
+        QueueHandler handler = webSocketClient.getQueueHandler(queue);
+        handler.removeListeners(eventClass);
     }
 
     protected void logout() {

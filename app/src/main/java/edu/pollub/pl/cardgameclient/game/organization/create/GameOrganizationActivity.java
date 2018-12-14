@@ -11,8 +11,8 @@ import edu.pollub.pl.cardgameclient.common.NetworkOperationStrategy;
 import edu.pollub.pl.cardgameclient.common.activity.SimpleNetworkActivity;
 import edu.pollub.pl.cardgameclient.communication.websocket.StompMessageListener;
 import edu.pollub.pl.cardgameclient.game.organization.GameOrganizationService;
-import edu.pollub.pl.cardgameclient.game.play.PlayGameActivity;
-import event.GameStartedEvent;
+import edu.pollub.pl.cardgameclient.game.progress.PlayGameActivity;
+import event.game.organization.GameStartedEvent;
 import response.GameResponse;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -22,7 +22,6 @@ import static edu.pollub.pl.cardgameclient.config.ConfigConst.GAME_QUEUE;
 @ContentView(R.layout.activity_create_game)
 public class GameOrganizationActivity extends SimpleNetworkActivity {
 
-    private GameResponse organizedGame;
     private String organizedGameEndpoint;
 
     @InjectView(R.id.cancelButton)
@@ -51,8 +50,8 @@ public class GameOrganizationActivity extends SimpleNetworkActivity {
 
         @Override
         public void execute() throws Exception {
-            organizedGame = service.organize();
-            organizedGameEndpoint = GAME_QUEUE + "/" +organizedGame.getId();
+            GameResponse organizedGame = service.organize();
+            organizedGameEndpoint = GAME_QUEUE + "/" + organizedGame.getId();
             listerForPlayerJoin();
         }
 

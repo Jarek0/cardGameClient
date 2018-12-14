@@ -1,6 +1,5 @@
 package edu.pollub.pl.cardgameclient.authorization.login;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +13,7 @@ import edu.pollub.pl.cardgameclient.common.activity.SimpleNetworkActivity;
 import edu.pollub.pl.cardgameclient.communication.websocket.StompMessageListener;
 import edu.pollub.pl.cardgameclient.menu.MenuActivity;
 import edu.pollub.pl.cardgameclient.authorization.registration.RegistrationActivity;
-import event.LogoutUserEvent;
+import event.authentication.LogoutUserEvent;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -103,7 +102,7 @@ public class LoginActivity extends SimpleNetworkActivity {
     private class LogoutListener extends StompMessageListener<LogoutUserEvent> {
 
         @Override
-        public void onMessage(LogoutUserEvent messageBody) {
+        public void onMessage(LogoutUserEvent event) {
             logout();
         }
 

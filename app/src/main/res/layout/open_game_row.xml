@@ -7,7 +7,7 @@
     android:background="@color/background"
     android:screenOrientation="portrait"
     android:orientation="vertical"
-    tools:context=".game.play.PlayGameActivity"
+    tools:context=".game.progress.PlayGameActivity"
     tools:layout_editor_absoluteY="25dp">
 
     <TextView

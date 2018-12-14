@@ -60,7 +60,11 @@
     <string name="nexPage">Next page</string>
     <string name="gameCreated">Game created. Waiting for a player…</string>
     <string name="gameStarted">Game started.</string>
-    <string name="defaultCardsNumber">Cards: 26</string>
+
+    <!-- game progress -->
+    <string name="defaultCardsNumber">Cards on stack: 26</string>
     <string name="defaultEnemyCardsNumber">Enemy cards: 5</string>
+    <string name="card">Card</string>
+    <string name="gameClosed">Game have been closed</string>
 
 </resources>

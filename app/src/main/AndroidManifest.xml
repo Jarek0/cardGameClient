@@ -11,20 +11,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".authorization.login.LoginActivity">
+        <activity android:name=".authorization.login.LoginActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="edu.pollub.pl.cardgameclient.menu.MenuActivity"/>
-        <activity android:name=".authorization.registration.RegistrationActivity"/>
-        <activity android:name=".authorization.changePassword.ChangePasswordActivity"/>
-        <activity android:name=".authorization.changeLogin.ChangeNickActivity"/>
-        <activity android:name=".game.organization.create.GameOrganizationActivity"/>
-        <activity android:name=".game.organization.find.FindGameActivity"/>
-        <activity android:name=".game.play.PlayGameActivity" android:screenOrientation="landscape"/>
+        <activity android:name="edu.pollub.pl.cardgameclient.menu.MenuActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".authorization.registration.RegistrationActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".authorization.changePassword.ChangePasswordActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".authorization.changeLogin.ChangeNickActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".game.organization.create.GameOrganizationActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".game.organization.find.FindGameActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".game.progress.PlayGameActivity" android:screenOrientation="landscape"/>
     </application>
 
 </manifest>
