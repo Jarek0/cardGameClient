@@ -24,6 +24,7 @@
         <activity android:name=".authorization.changeLogin.ChangeNickActivity" android:screenOrientation="portrait"/>
         <activity android:name=".game.organization.create.GameOrganizationActivity" android:screenOrientation="portrait"/>
         <activity android:name=".game.organization.find.FindGameActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".game.ranking.GameRankingActivity" android:screenOrientation="portrait"/>
         <activity android:name=".game.progress.PlayGameActivity" android:screenOrientation="landscape"/>
     </application>
 

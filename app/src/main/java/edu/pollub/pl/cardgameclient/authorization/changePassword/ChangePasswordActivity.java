@@ -16,7 +16,7 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_change_password)
 public class ChangePasswordActivity extends SimpleNetworkActivity {
 
-    @InjectView(R.id.newPasswordEditText)
+    @InjectView(R.id.loginEditText)
     private EditText newPasswordEditText;
 
     @InjectView(R.id.confirmNewPasswordEditText)

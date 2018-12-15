@@ -8,4 +8,5 @@ public class ConfigConst {
     public static final String SERVER = "http://10.0.2.2:8080/api";
 
     public static final String LOGIN_KEY = "login";
+    public static final String LOGIN_REGEX = "^[a-zA-Z0-9]*$";
 }

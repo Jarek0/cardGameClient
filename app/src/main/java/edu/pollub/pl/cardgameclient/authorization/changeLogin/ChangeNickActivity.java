@@ -14,11 +14,12 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 import static edu.pollub.pl.cardgameclient.config.ConfigConst.LOGIN_KEY;
+import static edu.pollub.pl.cardgameclient.config.ConfigConst.LOGIN_REGEX;
 
 @ContentView(R.layout.activity_change_nick)
 public class ChangeNickActivity extends SimpleNetworkActivity {
 
-    @InjectView(R.id.newPasswordEditText)
+    @InjectView(R.id.loginEditText)
     private EditText loginEditText;
 
     @InjectView(R.id.submitButton)
@@ -57,8 +58,13 @@ public class ChangeNickActivity extends SimpleNetworkActivity {
 
         @Override
         public Boolean isValid() {
-            if(loginEditText.getText().toString().isEmpty()) {
+            String login = loginEditText.getText().toString();
+            if(login.isEmpty()) {
                 showToast(R.string.loginRequired);
+                return false;
+            }
+            if(!login.matches(LOGIN_REGEX)) {
+                showToast(R.string.loginFormat);
                 return false;
             }
             return true;

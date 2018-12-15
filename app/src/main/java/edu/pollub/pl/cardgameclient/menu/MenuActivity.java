@@ -16,6 +16,7 @@ import edu.pollub.pl.cardgameclient.common.NetworkOperationStrategy;
 import edu.pollub.pl.cardgameclient.common.activity.SimpleNetworkActivity;
 import edu.pollub.pl.cardgameclient.game.organization.create.GameOrganizationActivity;
 import edu.pollub.pl.cardgameclient.game.organization.find.FindGameActivity;
+import edu.pollub.pl.cardgameclient.game.ranking.GameRankingActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -39,6 +40,9 @@ public class MenuActivity extends SimpleNetworkActivity {
     @InjectView(R.id.changePassword)
     private Button changePasswordButton;
 
+    @InjectView(R.id.ranking)
+    private Button rankingButton;
+
     @InjectView(R.id.logoutButton)
     private Button logoutButton;
 
@@ -54,6 +58,7 @@ public class MenuActivity extends SimpleNetworkActivity {
         changNickButton.setOnClickListener((v) -> goTo(ChangeNickActivity.class));
         changePasswordButton.setOnClickListener((v) -> goTo(ChangePasswordActivity.class));
         logoutButton.setOnClickListener((v) -> simpleNetworkTask(new LogoutTask()).execute());
+        rankingButton.setOnClickListener((v) -> goTo(GameRankingActivity.class));
     }
 
     @Override

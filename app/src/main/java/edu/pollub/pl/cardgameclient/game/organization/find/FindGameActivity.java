@@ -43,8 +43,6 @@ public class FindGameActivity extends SimpleNetworkActivity {
 
     private List<GameResponse> games;
 
-    private CountDownTimer searchDelayCounter;
-
     @InjectView(R.id.returnButton)
     private ImageButton returnButton;
 
@@ -57,7 +55,7 @@ public class FindGameActivity extends SimpleNetworkActivity {
     @InjectView(R.id.pageNumber)
     private TextView pageNumberView;
 
-    @InjectView(R.id.openGamesList)
+    @InjectView(R.id.page)
     private ListView openGamesListView;
 
     @InjectView(R.id.previousPageButton)

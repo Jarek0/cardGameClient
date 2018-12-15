@@ -28,6 +28,7 @@
     <string name="registerSuccess">Registration successful</string>
     <string name="auth.badCredentials" tools:ignore="ExtraTranslation">Bad credentials</string>
     <string name="loginRequired">Login is required</string>
+    <string name="loginFormat">Invalid login format</string>
     <string name="passwordRequired">Password is required</string>
     <string name="newPasswordRequired">New password is required</string>
     <string name="newPasswordConfirmationRequired">New password confirmation is required</string>
@@ -44,6 +45,8 @@
     <string name="findGame">Find game</string>
     <string name="changeNick">Change nick</string>
     <string name="changePassword">Change password</string>
+    <string name="ranking">Ranking</string>
+    <string name="gamesHistory">Games history</string>
     <string name="logout">Sign out</string>
 
     <!-- game organization -->
@@ -67,4 +70,6 @@
     <string name="card">Card</string>
     <string name="gameClosed">Game have been closed</string>
 
+    <!-- ranking -->
+    <string name="rankingPosition">1.Player loing: 100</string>
 </resources>
