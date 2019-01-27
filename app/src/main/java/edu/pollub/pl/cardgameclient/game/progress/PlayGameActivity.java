@@ -18,6 +18,7 @@ import edu.pollub.pl.cardgameclient.R;
 import edu.pollub.pl.cardgameclient.common.NetworkOperationStrategy;
 import edu.pollub.pl.cardgameclient.common.activity.SimpleNetworkActivity;
 import edu.pollub.pl.cardgameclient.communication.websocket.StompMessageListener;
+import edu.pollub.pl.cardgameclient.game.archives.ArchivedGameService;
 import edu.pollub.pl.cardgameclient.game.organization.GameOrganizationService;
 import edu.pollub.pl.cardgameclient.game.progress.service.GameProgressService;
 import edu.pollub.pl.cardgameclient.menu.MenuActivity;
@@ -44,6 +45,8 @@ public class PlayGameActivity extends SimpleNetworkActivity {
     private String gameId;
 
     private String gameEndpoint;
+
+    private String enemyLogin;
 
     @InjectView(R.id.playerCards)
     private TwoWayView playerCardsListView;
@@ -87,11 +90,15 @@ public class PlayGameActivity extends SimpleNetworkActivity {
 
     private Trump trump;
 
+    @Inject
+    private ArchivedGameService archivedGameService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         GameStartedEvent event = (GameStartedEvent) intent.getSerializableExtra("event");
+        enemyLogin = event.getEnemyLogin();
         gameId = event.getGameId();
         gameEndpoint = GAME_QUEUE + "/" + gameId;
         initGameElements(event);
@@ -232,12 +239,18 @@ public class PlayGameActivity extends SimpleNetworkActivity {
         });
     }
 
-    private void finishGame(String winnerName) {
+    private void finishGame(GameFinishedEvent event) {
         runOnUiThread(() -> {
             Toast playerWinToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
-            playerWinToast.setText("Player: " + winnerName + " won the game!");
+            playerWinToast.setText("Player: " + event.getWinnerLogin() + " won the game!");
             playerWinToast.show();
         });
+        archivedGameService.archiveGame(
+                event.getPoints(),
+                event.getDestinationPlayer(),
+                enemyLogin,
+                event.getDestinationPlayer().equals(event.getWinnerLogin()),
+                getApplicationContext());
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
         finish();
@@ -464,7 +477,7 @@ public class PlayGameActivity extends SimpleNetworkActivity {
 
         @Override
         public void onMessage(GameFinishedEvent event) {
-            finishGame(event.getWinnerLogin());
+            finishGame(event);
         }
 
         GameFinishedListener() { super(GameFinishedEvent.class);}

@@ -14,6 +14,7 @@ import edu.pollub.pl.cardgameclient.authorization.changePassword.ChangePasswordA
 import edu.pollub.pl.cardgameclient.authorization.login.LoginService;
 import edu.pollub.pl.cardgameclient.common.NetworkOperationStrategy;
 import edu.pollub.pl.cardgameclient.common.activity.SimpleNetworkActivity;
+import edu.pollub.pl.cardgameclient.game.archives.GameArchivesActivity;
 import edu.pollub.pl.cardgameclient.game.organization.create.GameOrganizationActivity;
 import edu.pollub.pl.cardgameclient.game.organization.find.FindGameActivity;
 import edu.pollub.pl.cardgameclient.game.ranking.GameRankingActivity;
@@ -30,6 +31,9 @@ public class MenuActivity extends SimpleNetworkActivity {
 
     @InjectView(R.id.createGameButton)
     private Button createGameButton;
+
+    @InjectView(R.id.gameArchivesButton)
+    private Button gameArchivesButton;
 
     @InjectView(R.id.findGameButton)
     private Button findGameButton;
@@ -54,6 +58,7 @@ public class MenuActivity extends SimpleNetworkActivity {
         super.onCreate(savedInstanceState);
         welcomeUser();
         createGameButton.setOnClickListener((v) -> goTo(GameOrganizationActivity.class));
+        gameArchivesButton.setOnClickListener((v) -> goTo(GameArchivesActivity.class));
         findGameButton.setOnClickListener((v) -> goTo(FindGameActivity.class));
         changNickButton.setOnClickListener((v) -> goTo(ChangeNickActivity.class));
         changePasswordButton.setOnClickListener((v) -> goTo(ChangePasswordActivity.class));

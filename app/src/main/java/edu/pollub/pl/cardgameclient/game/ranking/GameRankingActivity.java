@@ -88,7 +88,7 @@ public class GameRankingActivity extends SimpleNetworkActivity {
         previousPageButton.setEnabled(currentPage > 0);
         int currentPage = totalPages != 0? this.currentPage+1 : 0;
         pageNumberView.setText(currentPage + "/" + totalPages);
-        ArrayAdapter<String> gamesAdapter = new ArrayAdapter<>(this, R.layout.open_game_row, R.id.gameName, gameNames);
+        ArrayAdapter<String> gamesAdapter = new ArrayAdapter<>(this, R.layout.ranking_position_row, R.id.rankingPosition, gameNames);
         rankingPositionListView.setAdapter(gamesAdapter);
     }
 

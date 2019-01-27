@@ -42,6 +42,7 @@
     <!-- menu -->
     <string name="welcome">Welcome</string>
     <string name="createGame">Create game</string>
+    <string name="gameArchives">Game archives</string>
     <string name="findGame">Find game</string>
     <string name="changeNick">Change nick</string>
     <string name="changePassword">Change password</string>
@@ -72,4 +73,5 @@
 
     <!-- ranking -->
     <string name="rankingPosition">1.Player loing: 100</string>
+    <string name="archivedGame">Win, Player loing, 100\n2019-01-01 22:22</string>
 </resources>
